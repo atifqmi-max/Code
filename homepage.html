@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Pro Dashboard | Select Your Device</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at 20% 30%, #0B1120, #030712);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .animated-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .orb {
+      position: absolute;
+      background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.2), rgba(80, 150, 255, 0.08));
+      border-radius: 50%;
+      filter: blur(80px);
+      animation: floatOrb 22s infinite alternate ease-in-out;
+      pointer-events: none;
+    }
+
+    .orb1 {
+      width: 65vw;
+      height: 65vw;
+      top: -20vh;
+      left: -30vw;
+      background: radial-gradient(circle, rgba(0, 200, 255, 0.25), rgba(0, 80, 200, 0.05));
+      animation-duration: 26s;
+    }
+
+    .orb2 {
+      width: 80vw;
+      height: 80vw;
+      bottom: -40vh;
+      right: -35vw;
+      background: radial-gradient(circle, rgba(180, 100, 255, 0.2), rgba(80, 30, 160, 0.06));
+      animation-duration: 30s;
+      animation-delay: -6s;
+    }
+
+    .orb3 {
+      width: 50vw;
+      height: 50vw;
+      top: 50%;
+      left: 60%;
+      background: radial-gradient(circle, rgba(255, 180, 60, 0.2), rgba(255, 80, 80, 0.04));
+      filter: blur(90px);
+      animation-duration: 20s;
+      animation-delay: -3s;
+    }
+
+    @keyframes floatOrb {
+      0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.5;
+      }
+      100% {
+        transform: translate(5%, 8%) scale(1.12);
+        opacity: 0.85;
+      }
+    }
+
+    .glass-dashboard {
+      position: relative;
+      z-index: 20;
+      width: 100%;
+      max-width: 1100px;
+      background: rgba(15, 25, 45, 0.4);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-radius: 2.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+      padding: 2rem 2rem 2.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .welcome-area h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #FFFFFF, #A0C0FF);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.3px;
+    }
+
+    .welcome-area p {
+      color: rgba(220, 235, 255, 0.75);
+      font-size: 0.9rem;
+      margin-top: 0.3rem;
+    }
+
+    .logout-btn {
+      background: rgba(255, 75, 85, 0.2);
+      border: 1px solid rgba(255, 100, 110, 0.5);
+      padding: 0.6rem 1.2rem;
+      border-radius: 2.5rem;
+      color: #ffb5b0;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+      backdrop-filter: blur(5px);
+      font-size: 0.9rem;
+    }
+
+    .logout-btn:hover {
+      background: rgba(255, 75, 85, 0.4);
+      color: white;
+      border-color: #ff8a7a;
+      transform: scale(0.97);
+    }
+
+    .device-section {
+      margin: 2rem 0 1rem;
+    }
+
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .section-title i {
+      font-size: 1.5rem;
+      color: #6ea8ff;
+    }
+
+    .device-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+      align-items: stretch;
+    }
+
+    .device-card {
+      flex: 1;
+      min-width: 240px;
+      background: rgba(20, 32, 55, 0.55);
+      backdrop-filter: blur(12px);
+      border-radius: 2rem;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 12px 25px -10px rgba(0, 0, 0, 0.3);
+    }
+
+    .device-card:hover {
+      transform: translateY(-8px);
+      background: rgba(30, 48, 80, 0.7);
+      border-color: rgba(100, 180, 255, 0.6);
+      box-shadow: 0 20px 35px -8px rgba(0, 0, 0, 0.5);
+    }
+
+    .device-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    .device-card h3 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.5rem;
+    }
+
+    .device-card p {
+      color: rgba(210, 225, 255, 0.7);
+      font-size: 0.9rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .device-badge {
+      display: inline-block;
+      background: rgba(100, 160, 255, 0.25);
+      padding: 0.3rem 1rem;
+      border-radius: 2rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #bbd4ff;
+      border: 0.5px solid rgba(100, 180, 255, 0.5);
+    }
+
+    .code-vibe {
+      margin-top: 2rem;
+      background: rgba(0, 0, 0, 0.35);
+      border-radius: 1.5rem;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid #3b82f6;
+      font-family: 'Monaco', 'Menlo', monospace;
+      font-size: 0.8rem;
+      color: #b9e2ff;
+    }
+
+    .code-vibe i {
+      margin-right: 0.5rem;
+      color: #5dade2;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(0, 255, 150, 0.15);
+      padding: 0.2rem 0.8rem;
+      border-radius: 2rem;
+      font-size: 0.7rem;
+      font-weight: 500;
+    }
+
+    @media (max-width: 700px) {
+      .glass-dashboard {
+        padding: 1.5rem;
+      }
+      .device-card h3 {
+        font-size: 1.5rem;
+      }
+      .welcome-area h1 {
+        font-size: 1.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="animated-bg">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+</div>
+
+<div class="glass-dashboard">
+  <div class="dashboard-header">
+    <div class="welcome-area">
+      <h1><i class="fas fa-code"></i> DevStudio <span style="font-weight: 400;">| Live Coding Hub</span></h1>
+      <p id="userGreeting"><i class="fas fa-user-astronaut"></i> Loading profile...</p>
+    </div>
+    <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+  </div>
+
+  <div class="device-section">
+    <div class="section-title">
+      <i class="fas fa-microchip"></i>
+      <span>Select Your Development Environment</span>
+    </div>
+    <div class="device-grid">
+      <div class="device-card" id="mobileCardBtn">
+        <div class="device-icon">
+          <i class="fas fa-mobile-alt"></i>
+        </div>
+        <h3>Mobile Lab</h3>
+        <p>Responsive editor · Touch interface · On-the-go coding</p>
+        <span class="device-badge"><i class="fas fa-arrow-right"></i> Launch mobile.html</span>
+      </div>
+
+      <div class="device-card" id="pcCardBtn">
+        <div class="device-icon">
+          <i class="fas fa-desktop"></i>
+        </div>
+        <h3>PC Workstation</h3>
+        <p>Full IDE experience · Multi-file · Pro terminal</p>
+        <span class="device-badge"><i class="fas fa-arrow-right"></i> Launch pc.html</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="code-vibe">
+    <i class="fas fa-terminal"></i> <span id="liveMessage">$ Ready to deploy — select your target device</span>
+    <span style="float: right;" class="status-badge"><i class="fas fa-circle" style="font-size: 0.5rem; color: #2ecc71;"></i> session active</span>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const SESSION_KEY = 'glassSession';
+    const USERS_STORAGE_KEY = 'glass_auth_users';
+    
+    const userDisplay = document.getElementById('userGreeting');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const mobileBtn = document.getElementById('mobileCardBtn');
+    const pcBtn = document.getElementById('pcCardBtn');
+    const liveMsgSpan = document.getElementById('liveMessage');
+
+    function getSession() {
+      const session = sessionStorage.getItem(SESSION_KEY);
+      if (session) {
+        try {
+          return JSON.parse(session);
+        } catch(e) {
+          return null;
+        }
+      }
+      return null;
+    }
+
+    function isSessionValid(session) {
+      if (!session || !session.email) return false;
+      const users = localStorage.getItem(USERS_STORAGE_KEY);
+      if (!users) return false;
+      try {
+        const userList = JSON.parse(users);
+        return userList.some(u => u.email.toLowerCase() === session.email.toLowerCase());
+      } catch(e) {
+        return false;
+      }
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+      });
+    }
+
+    function redirectToLogin(message) {
+      if (message && liveMsgSpan) {
+        liveMsgSpan.innerHTML = message;
+      }
+      setTimeout(() => {
+        window.location.href = 'login.html';
+      }, 1500);
+    }
+
+    const session = getSession();
+
+    if (!session || !session.email || !isSessionValid(session)) {
+      sessionStorage.removeItem(SESSION_KEY);
+      if (liveMsgSpan) {
+        liveMsgSpan.innerHTML = `⚠️ No active session. Redirecting to login page...`;
+      }
+      redirectToLogin('🔐 Please login to access this page');
+    } else {
+      if (session.name) {
+        userDisplay.innerHTML = `<i class="fas fa-check-circle" style="color:#4cd964;"></i> Welcome back, <strong>${escapeHtml(session.name)}</strong> · <span style="font-size:0.75rem;">${escapeHtml(session.email || '')}</span>`;
+      } else {
+        userDisplay.innerHTML = `<i class="fas fa-check-circle" style="color:#4cd964;"></i> Welcome, <strong>${escapeHtml(session.email.split('@')[0])}</strong> · <span style="font-size:0.75rem;">${escapeHtml(session.email)}</span>`;
+      }
+      
+      if (liveMsgSpan) {
+        liveMsgSpan.innerHTML = `✅ Authenticated. Click Mobile or PC to open the dedicated coding environment.`;
+      }
+
+      function redirectToDevice(deviceType) {
+        if (deviceType === 'mobile') {
+          liveMsgSpan.innerHTML = `📱 Launching Mobile IDE — redirecting to mobile.html ...`;
+          setTimeout(() => {
+            window.location.href = 'mobile.html';
+          }, 300);
+        } else if (deviceType === 'pc') {
+          liveMsgSpan.innerHTML = `💻 Launching PC Workstation — redirecting to pc.html ...`;
+          setTimeout(() => {
+            window.location.href = 'pc.html';
+          }, 300);
+        }
+      }
+
+      if (mobileBtn) {
+        mobileBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          mobileBtn.style.transform = 'scale(0.97)';
+          setTimeout(() => { mobileBtn.style.transform = ''; }, 150);
+          redirectToDevice('mobile');
+        });
+      }
+
+      if (pcBtn) {
+        pcBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          pcBtn.style.transform = 'scale(0.97)';
+          setTimeout(() => { pcBtn.style.transform = ''; }, 150);
+          redirectToDevice('pc');
+        });
+      }
+
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+          sessionStorage.removeItem(SESSION_KEY);
+          liveMsgSpan.innerHTML = `🔓 Logged out successfully. Redirecting to login page...`;
+          setTimeout(() => {
+            window.location.href = 'login.html';
+          }, 800);
+        });
+      }
+
+      const cards = document.querySelectorAll('.device-card');
+      cards.forEach(card => {
+        card.addEventListener('mouseenter', () => {
+          const deviceName = card.querySelector('h3')?.innerText || 'device';
+          liveMsgSpan.innerHTML = `⚡ Ready to launch ${deviceName} environment — click to continue.`;
+        });
+        card.addEventListener('mouseleave', () => {
+          liveMsgSpan.innerHTML = `✅ Authenticated. Click Mobile or PC to open the dedicated coding environment.`;
+        });
+      });
+    }
+
+    window.addEventListener('pageshow', (event) => {
+      const currentSession = getSession();
+      if (!currentSession || !currentSession.email || !isSessionValid(currentSession)) {
+        sessionStorage.removeItem(SESSION_KEY);
+        redirectToLogin('🔐 Session expired. Please login again');
+      }
+    });
+  })();
+</script>
+</body>
+</html>
