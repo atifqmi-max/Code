@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PC Code Editor</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  height: 100vh;
+  background: linear-gradient(135deg, #1e1e2f, #2b2b4b);
+  display: flex;
+  color: white;
+}
+
+/* GLASS EFFECT */
+.glass {
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 250px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar h2 {
+  margin-bottom: 10px;
+}
+
+.file-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.file {
+  padding: 8px;
+  margin-bottom: 5px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.file:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.file.active {
+  background: rgba(0,150,255,0.3);
+}
+
+/* BUTTONS */
+button {
+  margin-top: 5px;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: rgba(0,150,255,0.6);
+  color: white;
+}
+
+button:hover {
+  background: rgba(0,150,255,0.9);
+}
+
+/* MAIN AREA */
+.main {
+  flex: 1;
+  display: flex;
+}
+
+/* EDITOR */
+.editor {
+  width: 50%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+textarea {
+  flex: 1;
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  resize: none;
+  font-size: 14px;
+}
+
+/* PREVIEW */
+.preview {
+  width: 50%;
+  border-left: 1px solid rgba(255,255,255,0.2);
+}
+
+iframe {
+  width: 100%;
+  height: 100%;
+  background: white;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar glass">
+  <h2>Files</h2>
+
+  <div class="file-list" id="fileList"></div>
+
+  <button onclick="createFile()">+ New File</button>
+  <button onclick="deleteFile()">Delete File</button>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- EDITOR -->
+  <div class="editor glass">
+    <h3 id="fileName">No File Selected</h3>
+    <textarea id="editor" placeholder="Write your code here..."></textarea>
+    <button onclick="updatePreview()">Run ▶</button>
+  </div>
+
+  <!-- PREVIEW -->
+  <div class="preview glass">
+    <iframe id="preview"></iframe>
+  </div>
+
+</div>
+
+<script>
+let files = {};
+let currentFile = null;
+
+function renderFiles() {
+  const fileList = document.getElementById("fileList");
+  fileList.innerHTML = "";
+
+  Object.keys(files).forEach(name => {
+    const div = document.createElement("div");
+    div.className = "file" + (name === currentFile ? " active" : "");
+    div.innerText = name;
+
+    div.onclick = () => openFile(name);
+    fileList.appendChild(div);
+  });
+}
+
+function createFile() {
+  const name = prompt("Enter file name (e.g. index.html)");
+  if (!name) return;
+
+  files[name] = "<h1>Hello World</h1>";
+  currentFile = name;
+
+  renderFiles();
+  openFile(name);
+}
+
+function deleteFile() {
+  if (!currentFile) return alert("No file selected");
+
+  delete files[currentFile];
+  currentFile = null;
+
+  document.getElementById("editor").value = "";
+  document.getElementById("fileName").innerText = "No File Selected";
+
+  renderFiles();
+}
+
+function openFile(name) {
+  currentFile = name;
+  document.getElementById("editor").value = files[name];
+  document.getElementById("fileName").innerText = name;
+
+  renderFiles();
+}
+
+document.getElementById("editor").addEventListener("input", () => {
+  if (currentFile) {
+    files[currentFile] = document.getElementById("editor").value;
+  }
+});
+
+function updatePreview() {
+  const iframe = document.getElementById("preview");
+  const code = document.getElementById("editor").value;
+
+  iframe.srcdoc = code;
+}
+
+/* DEFAULT FILE */
+files["index.html"] = "<h1>Welcome Bro 🚀</h1>";
+currentFile = "index.html";
+renderFiles();
+openFile("index.html");
+</script>
+
+</body>
+</html>
