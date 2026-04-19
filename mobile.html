@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mobile Code Editor</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+body {
+  height: 100vh;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  display: flex;
+  flex-direction: column;
+  color: white;
+}
+
+/* Glass effect */
+.glass {
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  border-radius: 15px;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* Header */
+.header {
+  padding: 10px;
+  text-align: center;
+  font-size: 18px;
+}
+
+/* Layout */
+.container {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 35%;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.file {
+  padding: 8px;
+  margin: 5px 0;
+  background: rgba(255,255,255,0.1);
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.file:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* Main */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+/* Buttons */
+.buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.15);
+  color: white;
+  font-weight: bold;
+}
+
+button:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+/* Editor */
+textarea {
+  flex: 1;
+  width: 100%;
+  border: none;
+  outline: none;
+  resize: none;
+  border-radius: 10px;
+  padding: 10px;
+  background: rgba(0,0,0,0.5);
+  color: #00ffcc;
+  font-family: monospace;
+}
+
+/* Preview */
+iframe {
+  flex: 1;
+  border: none;
+  border-radius: 10px;
+  background: white;
+  display: none;
+}
+
+/* Add file button */
+.add-btn {
+  margin-top: 10px;
+  width: 100%;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header glass">📱 Mobile Code Editor</div>
+
+<div class="container">
+
+  <!-- Sidebar -->
+  <div class="sidebar glass">
+    <div id="fileList"></div>
+    <button class="add-btn" onclick="addFile()">+ New File</button>
+  </div>
+
+  <!-- Main -->
+  <div class="main glass">
+
+    <div class="buttons">
+      <button onclick="showEditor()">Edit Code</button>
+      <button onclick="showPreview()">Preview</button>
+    </div>
+
+    <textarea id="editor"></textarea>
+    <iframe id="preview"></iframe>
+
+  </div>
+
+</div>
+
+<script>
+
+let files = {
+  "index.html": "<h1>Hello World</h1>"
+};
+
+let currentFile = "index.html";
+
+function renderFiles() {
+  let list = document.getElementById("fileList");
+  list.innerHTML = "";
+
+  for (let file in files) {
+    let div = document.createElement("div");
+    div.className = "file";
+
+    div.innerHTML = `
+      <span onclick="openFile('${file}')">${file}</span>
+      <span onclick="deleteFile('${file}')">🗑</span>
+    `;
+
+    list.appendChild(div);
+  }
+}
+
+function openFile(name) {
+  currentFile = name;
+  document.getElementById("editor").value = files[name];
+}
+
+function addFile() {
+  let name = prompt("Enter file name:");
+  if (!name) return;
+
+  files[name] = "";
+  renderFiles();
+}
+
+function deleteFile(name) {
+  if (confirm("Delete " + name + "?")) {
+    delete files[name];
+    currentFile = Object.keys(files)[0];
+    renderFiles();
+    openFile(currentFile);
+  }
+}
+
+document.getElementById("editor").addEventListener("input", () => {
+  files[currentFile] = document.getElementById("editor").value;
+});
+
+function showPreview() {
+  let iframe = document.getElementById("preview");
+  let editor = document.getElementById("editor");
+
+  iframe.style.display = "block";
+  editor.style.display = "none";
+
+  iframe.srcdoc = files[currentFile];
+}
+
+function showEditor() {
+  let iframe = document.getElementById("preview");
+  let editor = document.getElementById("editor");
+
+  iframe.style.display = "none";
+  editor.style.display = "block";
+}
+
+// Init
+renderFiles();
+openFile(currentFile);
+
+</script>
+
+</body>
+</html>
